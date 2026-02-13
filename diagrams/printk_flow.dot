@@ -1,0 +1,14 @@
+digraph printk_flow {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightblue];
+    
+    driver [label="Driver Code"];
+    printk [label="printk() Call\n(Async, Lockless)"];
+    buffer [label="Ring Buffer\n(log_buf)"];
+    kthread [label="kthread (printk)\nDeferred Print"];
+    tools [label="User Tools\n(dmesg, journal)"];
+    
+    driver -> printk -> buffer;
+    printk -> kthread;
+    buffer -> tools;
+}

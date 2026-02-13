@@ -1,0 +1,63 @@
+digraph learning_roadmap {
+    rankdir=TB;
+    node [shape=box, style=filled];
+    
+    start [label="START HERE\nRead Terminology Glossary\n(30 minutes)", fillcolor=lightgreen, shape=ellipse];
+    
+    subgraph cluster_phase1 {
+        label="Phase 1: Basic Debugging (Week 1-2)\n60% of bugs solved";
+        style=filled;
+        fillcolor=lightblue;
+        
+        printk [label="printk Debugging\n- Basic logging\n- Log levels\n- dmesg\n⭐ Difficulty"];
+        pr_macros [label="pr_* Macros\n- pr_info, pr_err\n- dev_* macros\n⭐ Difficulty"];
+        lab1 [label="Lab 1-3\nHands-on practice", fillcolor=lightyellow];
+    }
+    
+    subgraph cluster_phase2 {
+        label="Phase 2: Runtime Debugging (Week 3-4)\n75% of bugs solved";
+        style=filled;
+        fillcolor=lightgreen;
+        
+        dynamic [label="Dynamic Debug\n- Runtime control\n- No recompile\n⭐⭐ Difficulty"];
+        debugfs [label="Debugfs\n- Expose state\n- seq_file\n⭐⭐ Difficulty"];
+        lab4 [label="Lab 4-5\nDebugfs interface", fillcolor=lightyellow];
+    }
+    
+    subgraph cluster_phase3 {
+        label="Phase 3: Advanced Analysis (Week 5-8)\n90% of bugs solved";
+        style=filled;
+        fillcolor=orange;
+        
+        oops [label="Oops Analysis\n- Stack traces\n- addr2line\n⭐⭐⭐ Difficulty"];
+        kasan [label="KASAN\n- Memory bugs\n- Use-after-free\n⭐⭐⭐ Difficulty"];
+        lockdep [label="Lockdep\n- Deadlocks\n- Race conditions\n⭐⭐⭐ Difficulty"];
+        lab6 [label="Lab 6-7\nCrash debugging", fillcolor=lightyellow];
+    }
+    
+    subgraph cluster_phase4 {
+        label="Phase 4: Expert Tools (Month 3+)\n95%+ bugs solved";
+        style=filled;
+        fillcolor=lightcoral;
+        
+        ftrace [label="ftrace\n- Function tracing\n- Timing analysis\n⭐⭐⭐⭐ Difficulty"];
+        perf [label="perf\n- Performance\n- Profiling\n⭐⭐⭐⭐ Difficulty"];
+        kgdb [label="KGDB\n- Interactive debug\n- Breakpoints\n⭐⭐⭐⭐ Difficulty"];
+    }
+    
+    expert [label="EXPERT LEVEL\nCan debug production systems", fillcolor=gold, shape=ellipse];
+    
+    start -> printk;
+    printk -> pr_macros -> lab1;
+    lab1 -> dynamic;
+    dynamic -> debugfs -> lab4;
+    lab4 -> oops;
+    oops -> kasan -> lockdep -> lab6;
+    lab6 -> ftrace;
+    ftrace -> perf -> kgdb;
+    kgdb -> expert;
+    
+    // Shortcuts
+    start -> dynamic [label="Skip if\nexperienced", style=dashed, color=blue];
+    lab1 -> oops [label="Skip Phase 2\nif time-limited", style=dashed, color=red];
+}

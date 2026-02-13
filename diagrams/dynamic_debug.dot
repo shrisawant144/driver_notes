@@ -1,0 +1,15 @@
+digraph dynamic_debug {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightyellow];
+    
+    source [label="Driver Source\n(with #DEBUG)"];
+    macro [label="pr_debug() Macro\n(Instrumented Site)"];
+    noop [label="Compiled no-op\n(unless enabled)"];
+    sysfs [label="Sysfs Control\n(/sys/.../control)"];
+    activate [label="Runtime Activation\n(Enable Site)"];
+    
+    source -> macro -> noop;
+    macro -> sysfs;
+    noop -> activate;
+    sysfs -> activate;
+}

@@ -1,0 +1,19 @@
+digraph debugging_workflow {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lavender];
+    
+    symptom [label="Bug Symptom\n(Panic/Log)"];
+    analysis [label="Initial Analysis\n(dmesg/stack)"];
+    selection [label="Tool Selection\n(printk/ftrace)"];
+    instrument [label="Instrumentation\n(Add pr_debug)"];
+    verify [label="Verification\n(Fix & Retest)"];
+    root [label="Root Cause Found\n(Document)"];
+    regression [label="Regression Test\n(Prevent Future)"];
+    
+    symptom -> analysis -> selection;
+    selection -> instrument;
+    selection -> verify;
+    instrument -> root;
+    verify -> root;
+    root -> regression;
+}

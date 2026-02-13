@@ -1,0 +1,14 @@
+digraph ftrace_workflow {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightcoral];
+    
+    driver [label="Driver Code"];
+    probe [label="Function Entry\n(Probe Inserted)"];
+    buffer [label="Trace Buffer\n(Ring Buffer)"];
+    sysfs [label="Sysfs Controls\n(set_filter)"];
+    tools [label="Tools\n(trace-cmd, cat trace)"];
+    
+    driver -> probe -> buffer;
+    probe -> sysfs;
+    buffer -> tools;
+}

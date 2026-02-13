@@ -1,0 +1,14 @@
+digraph debugfs_structure {
+    rankdir=TB;
+    node [shape=box, style=filled, fillcolor=lightgreen];
+    
+    module [label="Kernel Module\n(init)"];
+    create [label="debugfs_create_*\n(Dir/Files)"];
+    fs [label="/sys/kernel/debug/\nmydriver/\n- value\n- status", shape=folder];
+    user [label="User Access\n(cat/echo)"];
+    callback [label="Kernel Callbacks\n(show/write)"];
+    
+    module -> create -> fs;
+    fs -> user;
+    fs -> callback;
+}
