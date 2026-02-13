@@ -1,0 +1,36 @@
+digraph synchronization_choice {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    start [label="Need to Protect\nShared Data?", shape=diamond, style=filled, fillcolor=lightyellow];
+    
+    interrupt [label="In Interrupt\nContext?", shape=diamond];
+    sleep [label="Can Sleep?", shape=diamond];
+    multiple [label="Multiple\nAllowed?", shape=diamond];
+    
+    spinlock [label="Use Spinlock\n- spin_lock()\n- Fast\n- Busy-wait", shape=box, style=filled, fillcolor=lightcoral];
+    
+    mutex [label="Use Mutex\n- mutex_lock()\n- Can sleep\n- Process context", shape=box, style=filled, fillcolor=lightgreen];
+    
+    semaphore [label="Use Semaphore\n- down()\n- Multiple allowed\n- Counting", shape=box, style=filled, fillcolor=lightblue];
+    
+    atomic [label="Use Atomic Ops\n- atomic_inc()\n- Simple counters\n- No lock needed", shape=box, style=filled, fillcolor=yellow];
+    
+    simple [label="Simple\nCounter?", shape=diamond];
+    
+    start -> simple;
+    simple -> atomic [label="Yes"];
+    simple -> interrupt [label="No"];
+    
+    interrupt -> spinlock [label="Yes"];
+    interrupt -> sleep [label="No"];
+    
+    sleep -> spinlock [label="No"];
+    sleep -> multiple [label="Yes"];
+    
+    multiple -> semaphore [label="Yes"];
+    multiple -> mutex [label="No"];
+    
+    label="Synchronization Mechanism Selection";
+    fontsize=16;
+}

@@ -1,0 +1,49 @@
+digraph memory_allocation {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    start [label="Need Memory?", shape=diamond, style=filled, fillcolor=lightyellow];
+    size [label="How much?", shape=diamond];
+    context [label="Interrupt\nContext?", shape=diamond];
+    
+    small [label="< 128KB", shape=box];
+    large [label="> 128KB", shape=box];
+    
+    kmalloc_kernel [label="kmalloc(size,\nGFP_KERNEL)", shape=box, style=filled, fillcolor=lightgreen];
+    kmalloc_atomic [label="kmalloc(size,\nGFP_ATOMIC)", shape=box, style=filled, fillcolor=lightcoral];
+    vmalloc_call [label="vmalloc(size)", shape=box, style=filled, fillcolor=lightblue];
+    
+    check [label="Check if\nNULL?", shape=diamond];
+    error [label="Return\n-ENOMEM", shape=box, style=filled, fillcolor=red];
+    use [label="Use Memory", shape=box, style=filled, fillcolor=lightgreen];
+    free_k [label="kfree(ptr)", shape=box];
+    free_v [label="vfree(ptr)", shape=box];
+    done [label="Done", shape=ellipse];
+    
+    start -> size;
+    size -> small [label="Small"];
+    size -> large [label="Large"];
+    
+    small -> context;
+    context -> kmalloc_atomic [label="Yes"];
+    context -> kmalloc_kernel [label="No"];
+    
+    large -> vmalloc_call;
+    
+    kmalloc_kernel -> check;
+    kmalloc_atomic -> check;
+    vmalloc_call -> check;
+    
+    check -> error [label="NULL"];
+    check -> use [label="Valid"];
+    
+    use -> free_k [label="kmalloc"];
+    use -> free_v [label="vmalloc"];
+    
+    free_k -> done;
+    free_v -> done;
+    error -> done;
+    
+    label="Memory Allocation Decision Tree";
+    fontsize=16;
+}

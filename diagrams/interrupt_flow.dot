@@ -1,0 +1,24 @@
+digraph interrupt_flow {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    hw [label="Hardware Device\nGenerates Interrupt", shape=box, style=filled, fillcolor=lightblue];
+    cpu [label="CPU Receives\nInterrupt Signal", shape=box];
+    save [label="Save Current\nContext", shape=box, style=filled, fillcolor=lightyellow];
+    handler [label="Top Half\n(Interrupt Handler)\n- Fast!\n- Acknowledge IRQ\n- Read critical data", shape=box, style=filled, fillcolor=lightcoral];
+    schedule [label="Schedule\nBottom Half", shape=box];
+    restore [label="Restore Context\nResume Execution", shape=box, style=filled, fillcolor=lightyellow];
+    bottom [label="Bottom Half\n(Tasklet/Workqueue)\n- Can take time\n- Process data", shape=box, style=filled, fillcolor=lightgreen];
+    done [label="Interrupt\nHandling Complete", shape=ellipse];
+    
+    hw -> cpu;
+    cpu -> save;
+    save -> handler;
+    handler -> schedule;
+    schedule -> restore;
+    restore -> bottom [style=dashed, label="Later"];
+    bottom -> done;
+    
+    label="Interrupt Handling Flow\nTop Half (Fast) → Bottom Half (Slower)";
+    fontsize=16;
+}

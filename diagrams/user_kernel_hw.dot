@@ -1,0 +1,37 @@
+digraph device_driver_communication {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    subgraph cluster_user {
+        label="User Space";
+        style=filled;
+        fillcolor=lightblue;
+        app [label="Application\n(e.g., cat /dev/mydev)"];
+    }
+    
+    subgraph cluster_kernel {
+        label="Kernel Space";
+        style=filled;
+        fillcolor=lightyellow;
+        
+        vfs [label="VFS Layer\n(Virtual File System)"];
+        driver [label="Device Driver\n(Your Code)"];
+    }
+    
+    subgraph cluster_hardware {
+        label="Hardware";
+        style=filled;
+        fillcolor=lightgreen;
+        hw [label="Physical Device"];
+    }
+    
+    app -> vfs [label="read(fd, buf, size)\nSystem Call"];
+    vfs -> driver [label="driver->read()"];
+    driver -> hw [label="I/O Operations\n(readl/writel)"];
+    hw -> driver [label="Data"];
+    driver -> vfs [label="Return Data"];
+    vfs -> app [label="copy_to_user()"];
+    
+    label="User Space ↔ Kernel ↔ Hardware Communication";
+    fontsize=16;
+}

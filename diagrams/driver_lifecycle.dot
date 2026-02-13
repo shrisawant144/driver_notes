@@ -1,0 +1,31 @@
+digraph driver_lifecycle {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    start [label="Driver Source Code\n(.c file)", shape=note];
+    compile [label="Compile\n(make)", shape=box];
+    ko [label="Kernel Module\n(.ko file)", shape=note];
+    load [label="Load Module\n(insmod/modprobe)", shape=box];
+    init [label="module_init()\nCalled", shape=ellipse, style=filled, fillcolor=lightblue];
+    probe [label="probe()\nDevice Found", shape=ellipse, style=filled, fillcolor=lightgreen];
+    running [label="Driver Running\nHandling Requests", shape=box, style=filled, fillcolor=yellow];
+    remove [label="remove()\nDevice Removed", shape=ellipse, style=filled, fillcolor=orange];
+    unload [label="Unload Module\n(rmmod)", shape=box];
+    exit [label="module_exit()\nCalled", shape=ellipse, style=filled, fillcolor=lightcoral];
+    end [label="Driver Unloaded", shape=note];
+    
+    start -> compile;
+    compile -> ko;
+    ko -> load;
+    load -> init;
+    init -> probe [label="Device\nDetected"];
+    probe -> running;
+    running -> running [label="read/write/ioctl"];
+    running -> remove [label="Device\nUnplugged"];
+    remove -> unload;
+    unload -> exit;
+    exit -> end;
+    
+    label="Driver Lifecycle - From Code to Running";
+    fontsize=16;
+}

@@ -2,6 +2,16 @@
 
 A comprehensive guide to Linux kernel and device driver development.
 
+## 🎓 New to Driver Development?
+
+**Start here:** [Complete Layman's Guide](LAYMAN_GUIDE.md) - Simple explanations, analogies, and flow diagrams for every concept!
+
+Each chapter now includes a **🎯 Layman's Explanation** section with:
+- Real-world analogies
+- Visual flow diagrams  
+- Simple examples
+- Key concepts explained for beginners
+
 ## Table of Contents
 
 1. [Linux Kernel Compilation](01-kernel-compilation.md)

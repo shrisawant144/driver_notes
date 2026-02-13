@@ -1,0 +1,36 @@
+digraph platform_driver_matching {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    dt [label="Device Tree\n(.dts file)\nDescribes Hardware", shape=note, style=filled, fillcolor=lightblue];
+    
+    boot [label="System Boot\nKernel Reads DT", shape=box];
+    
+    create [label="Kernel Creates\nPlatform Devices", shape=box, style=filled, fillcolor=lightyellow];
+    
+    driver [label="Platform Driver\nRegistered", shape=box, style=filled, fillcolor=lightgreen];
+    
+    match [label="Compatible\nString Match?", shape=diamond];
+    
+    probe [label="Driver probe()\nCalled", shape=box, style=filled, fillcolor=lightcoral];
+    
+    init [label="Driver Initializes\nHardware", shape=box];
+    
+    ready [label="Device Ready\nto Use", shape=ellipse, style=filled, fillcolor=yellow];
+    
+    nomatch [label="No Match\nWait for Driver", shape=box];
+    
+    dt -> boot;
+    boot -> create;
+    create -> match;
+    driver -> match;
+    
+    match -> probe [label="Yes\ncompatible =\n\"vendor,device\""];
+    match -> nomatch [label="No"];
+    
+    probe -> init;
+    init -> ready;
+    
+    label="Platform Driver Matching Process\n(Device Tree → Driver → Hardware)";
+    fontsize=16;
+}
